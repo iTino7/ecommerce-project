@@ -4,6 +4,7 @@ import { ArrowLeft } from "lucide-react";
 import { z } from "zod";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
+import PasswordInput from "@/components/PasswordInput";
 import { Button } from "@/components/ui/button";
 
 const registerSchema = z.object({
@@ -98,12 +99,12 @@ function AuthPage() {
               <ErrorMsg field="email" />
             </div>
             <div>
-              <Input name="password" type="password" placeholder="Password" value={form.password} onChange={handleChange} />
+              <PasswordInput name="password" placeholder="Password" value={form.password} onChange={handleChange} />
               <ErrorMsg field="password" />
             </div>
             {!isLogin && (
               <div>
-                <Input name="confirmPassword" type="password" placeholder="Conferma password" value={form.confirmPassword} onChange={handleChange} />
+                <PasswordInput name="confirmPassword" placeholder="Conferma password" value={form.confirmPassword} onChange={handleChange} />
                 <ErrorMsg field="confirmPassword" />
               </div>
             )}
