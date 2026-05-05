@@ -28,6 +28,88 @@ body {
   place-items: center;
   min-width: 320px;
   min-height: 100vh;
+  transition: background-color 0.4s ease, color 0.4s ease;
+}
+
+html.light body {
+  background-color: #ffffff;
+  color: #213547;
+}
+
+html.light button {
+  background-color: #f9f9f9;
+}
+
+nav {
+  background-color: #1a1a1a;
+  transition: background-color 0.4s ease, color 0.4s ease;
+}
+
+html.light nav {
+  background-color: #f0f0f0;
+  color: #213547;
+}
+
+.search-btn {
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  color: inherit;
+  padding: 0.65rem 0.8rem;
+  margin: -0.15rem -0.2rem;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  transition: background-color 0.4s ease;
+}
+
+.search-btn:hover {
+  background-color: rgba(255, 255, 255, 0.15);
+}
+
+html.light .search-btn {
+  background-color: transparent;
+}
+
+.search-divider {
+  transition: opacity 0.4s ease;
+}
+
+.search-btn {
+  position: relative;
+}
+
+.search-btn .icon-search,
+.search-btn .icon-x {
+  display: flex;
+  align-items: center;
+  transition: opacity 0.35s ease, transform 0.35s ease;
+}
+
+.search-btn .icon-x {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) rotate(90deg);
+  opacity: 0;
+}
+
+.search-btn.search-open .icon-search {
+  opacity: 0;
+  transform: rotate(-90deg);
+}
+
+.search-btn.search-open .icon-x {
+  opacity: 1;
+  transform: translate(-50%, -50%) rotate(0deg);
+}
+
+.search-group:has(.search-btn:hover) .search-divider {
+  opacity: 0 !important;
+}
+
+html.light .search-btn:hover {
+  background-color: rgba(0, 0, 0, 0.1);
 }
 
 h1 {
@@ -49,7 +131,10 @@ button {
 button:hover {
   border-color: #646cff;
 }
-button:focus,
+button:focus {
+  outline: none;
+}
+
 button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
 }
