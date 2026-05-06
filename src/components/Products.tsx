@@ -1,16 +1,16 @@
-import { useCart } from "../context/CartContext";
+import { useNavigate } from "react-router-dom";
+import { products } from "../data/products";
 
 function Products() {
-  const { addItem } = useCart();
-  const items = Array.from({ length: 8 }, (_, i) => i + 1);
+  const navigate = useNavigate();
 
   return (
     <section style={{ padding: "4rem 2rem", minHeight: "100vh" }}>
       <h2 style={{ fontSize: "1.5rem", fontWeight: 600, marginBottom: "2rem" }}>Prodotti</h2>
       <div className="products-flex">
-        {items.map(i => (
+        {products.map(product => (
           <div
-            key={i}
+            key={product.id}
             className="product-card"
             style={{
               borderRadius: "12px",
@@ -22,7 +22,7 @@ function Products() {
               gap: "0.75rem",
               cursor: "pointer",
             }}
-            onClick={() => addItem({ id: i, name: `Prodotto ${i}`, price: i * 19.99 })}
+            onClick={() => navigate(`/products/${product.id}`)}
           >
             <div style={{
               width: "100%",
@@ -30,8 +30,8 @@ function Products() {
               borderRadius: "8px",
               backgroundColor: "rgba(128,128,128,0.1)",
             }} />
-            <div style={{ fontSize: "0.95rem", fontWeight: 500 }}>Prodotto {i}</div>
-            <div style={{ fontSize: "0.85rem", opacity: 0.5 }}>€ {(i * 19.99).toFixed(2)}</div>
+            <div style={{ fontSize: "0.95rem", fontWeight: 500 }}>{product.name}</div>
+            <div style={{ fontSize: "0.85rem", opacity: 0.5 }}>€ {product.price.toFixed(2)}</div>
           </div>
         ))}
       </div>

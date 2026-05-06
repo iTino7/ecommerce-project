@@ -27,7 +27,7 @@ function Navbar() {
       }}>
         {/* Logo + search desktop */}
         <div style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
-          <h2 style={{ margin: 0, fontSize: "2rem", fontFamily: "'Playwrite NZ Guides', cursive" }}>Shopia</h2>
+          <h2 style={{ margin: 0, fontSize: "2rem", fontFamily: "'Playwrite NZ Guides', cursive" }}>SkyCart</h2>
 
           <div className="navbar-desktop search-group" style={{ display: "flex", alignItems: "center", gap: "0.2rem" }}>
             <div className="search-divider" style={{ width: "1px", height: "1.2rem", backgroundColor: "currentColor", opacity: 0.2 }} />
@@ -74,7 +74,7 @@ function Navbar() {
             <Input placeholder="What are you looking for?" style={{ flex: 1 }} />
           </div>
 
-          <button className="search-btn mobile-menu-btn" onClick={() => { navigate("/cart"); setIsMobileMenuOpen(false); }}>
+          <button className="search-btn mobile-menu-btn" onClick={() => { openCart(); setIsMobileMenuOpen(false); }}>
             <ShoppingCart size={18} /> <span>Carrello</span>
             {cartCount > 0 && <span className="cart-badge">{cartCount}</span>}
           </button>

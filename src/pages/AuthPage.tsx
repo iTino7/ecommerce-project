@@ -8,7 +8,7 @@ import PasswordInput from "@/components/PasswordInput";
 import { Button } from "@/components/ui/button";
 
 const registerSchema = z.object({
-  name: z.string().min(1, "Nome e cognome obbligatorio"),
+  name: z.string().min(1, "Nome obbligatorio"),
   email: z.string().email("Email non valida"),
   password: z.string()
     .min(8, "La password deve contenere almeno 8 caratteri")
@@ -80,17 +80,17 @@ function AuthPage() {
         <ArrowLeft size={28} />
       </button>
       <div style={{ display: "flex", justifyContent: "center", alignItems: "center", height: "100%" }}>
-        <Card className="w-[380px]">
+        <Card className="w-[320px] py-8">
           <CardHeader>
             <CardTitle>{isLogin ? "Bentornato" : "Crea un account"}</CardTitle>
             <CardDescription>
-              {isLogin ? "Accedi al tuo account Shopia" : "Registrati per iniziare a fare shopping"}
+              {isLogin ? "Accedi al tuo account SkyCart" : "Registrati per iniziare a fare shopping"}
             </CardDescription>
           </CardHeader>
-          <CardContent className="flex flex-col gap-3">
+          <CardContent className="flex flex-col gap-5">
             {!isLogin && (
               <div>
-                <Input name="name" placeholder="Nome e cognome" value={form.name} onChange={handleChange} />
+                <Input name="name" placeholder="Nome" value={form.name} onChange={handleChange} />
                 <ErrorMsg field="name" />
               </div>
             )}

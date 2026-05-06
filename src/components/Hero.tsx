@@ -53,7 +53,7 @@ function Hero({ onDone }: HeroProps) {
       }}
     >
       <BlurText
-        text="Benvenuti su Shopia"
+        text="Benvenuti su SkyCart"
         className="text-5xl font-bold"
         delay={120}
         animateBy="words"

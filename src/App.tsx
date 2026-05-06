@@ -4,11 +4,17 @@ import Navbar from "./components/Navbar";
 import Hero from "./components/Hero";
 import Products from "./components/Products";
 import AuthPage from "./pages/AuthPage";
+import ProductDetailPage from "./pages/ProductDetailPage";
 import CartSidebar from "./components/CartSidebar";
 import { CartProvider } from "./context/CartContext";
 
 function Home() {
-  const [heroGone, setHeroGone] = useState(false);
+  const [heroGone, setHeroGone] = useState(() => sessionStorage.getItem("heroSeen") === "true");
+
+  const handleHeroDone = () => {
+    sessionStorage.setItem("heroSeen", "true");
+    setHeroGone(true);
+  };
 
   return (
     <div>
@@ -25,7 +31,7 @@ function Home() {
       >
         <Products />
       </div>
-      {!heroGone && <Hero onDone={() => setHeroGone(true)} />}
+      {!heroGone && <Hero onDone={handleHeroDone} />}
     </div>
   );
 }
@@ -39,6 +45,7 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<AuthPage />} />
           <Route path="/register" element={<AuthPage />} />
+          <Route path="/products/:id" element={<ProductDetailPage />} />
         </Routes>
       </BrowserRouter>
     </CartProvider>
