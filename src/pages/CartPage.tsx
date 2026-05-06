@@ -36,13 +36,18 @@ function CartPage() {
             borderRadius: "12px",
             border: "1px solid rgba(128,128,128,0.2)",
           }}>
-            <div style={{
-              width: "64px",
-              height: "64px",
-              borderRadius: "8px",
-              backgroundColor: "rgba(128,128,128,0.1)",
-              flexShrink: 0,
-            }} />
+            <img
+              src={item.imageUrl}
+              alt={item.name}
+              style={{
+                width: "64px",
+                height: "64px",
+                borderRadius: "8px",
+                backgroundColor: "rgba(128,128,128,0.1)",
+                objectFit: "cover",
+                flexShrink: 0,
+              }}
+            />
             <div style={{ flex: 1 }}>
               <div style={{ fontWeight: 500 }}>{item.name}</div>
               <div style={{ fontSize: "0.85rem", opacity: 0.5 }}>Quantità: {item.quantity}</div>

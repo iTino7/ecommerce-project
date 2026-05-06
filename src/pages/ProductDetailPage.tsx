@@ -1,15 +1,36 @@
 import { useParams, useNavigate } from "react-router-dom";
+import { useQuery } from "@tanstack/react-query";
 import { ArrowLeft, ShoppingCart } from "lucide-react";
-import { products } from "../data/products";
+import type { Product } from "../types/product";
 import { useCart } from "../context/CartContext";
 import Navbar from "../components/Navbar";
+
+async function fetchProduct(id: string): Promise<Product | null> {
+  const res = await fetch(`http://localhost:3002/api/products/${id}`);
+  if (!res.ok) return null;
+  return res.json();
+}
 
 function ProductDetailPage() {
   const { id } = useParams();
   const navigate = useNavigate();
   const { addItem, openCart } = useCart();
+  const { data: product, isLoading } = useQuery({
+    queryKey: ["product", id],
+    queryFn: () => fetchProduct(id!),
+    enabled: !!id,
+  });
 
-  const product = products.find(p => p.id === Number(id));
+  if (isLoading) {
+    return (
+      <>
+        <Navbar />
+        <div style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", opacity: 0.5 }}>
+          Caricamento...
+        </div>
+      </>
+    );
+  }
 
   if (!product) {
     return (
@@ -50,13 +71,18 @@ function ProductDetailPage() {
         </button>
 
         <div style={{ display: "flex", gap: "3rem", flexWrap: "wrap" }}>
-          <div style={{
-            flex: "1 1 320px",
-            aspectRatio: "1",
-            borderRadius: "16px",
-            backgroundColor: "rgba(128,128,128,0.1)",
-            minHeight: "300px",
-          }} />
+          <img
+            src={product.imageUrl}
+            alt={product.name}
+            style={{
+              flex: "1 1 320px",
+              aspectRatio: "1",
+              borderRadius: "16px",
+              backgroundColor: "rgba(128,128,128,0.1)",
+              minHeight: "300px",
+              objectFit: "cover",
+            }}
+          />
 
           <div style={{ flex: "1 1 260px", display: "flex", flexDirection: "column", gap: "1.25rem" }}>
             <div>
@@ -66,8 +92,12 @@ function ProductDetailPage() {
               </p>
             </div>
 
+            <p style={{ margin: 0, fontSize: "0.85rem", opacity: 0.6, textTransform: "uppercase", letterSpacing: "0.05em" }}>
+              {product.category} · {product.stock > 0 ? `${product.stock} disponibili` : "Esaurito"}
+            </p>
+
             <p style={{ margin: 0, fontSize: "0.95rem", opacity: 0.55, lineHeight: 1.6 }}>
-              Descrizione del prodotto non ancora disponibile.
+              {product.description}
             </p>
 
             <button

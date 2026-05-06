@@ -37,7 +37,12 @@ function CartSidebar() {
               {items.map((item: CartItem) => (
                 <div key={item.id} className="flex flex-col rounded-xl border border-border/30 overflow-hidden">
                   <div className="flex items-center gap-3 p-3">
-                    <div className="rounded-lg bg-muted shrink-0" style={{ width: 52, height: 52 }} />
+                    <img
+                      src={item.imageUrl}
+                      alt={item.name}
+                      className="rounded-lg bg-muted shrink-0 object-cover"
+                      style={{ width: 52, height: 52 }}
+                    />
                     <div className="flex-1 min-w-0">
                       <p className="font-medium text-sm m-0 truncate">{item.name}</p>
                       <p className="text-xs opacity-50 m-0">Qtà: {item.quantity}</p>
