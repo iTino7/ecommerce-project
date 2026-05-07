@@ -1,19 +1,9 @@
 import { useNavigate } from "react-router-dom";
-import { useQuery } from "@tanstack/react-query";
-import type { Product } from "../types/product";
-
-async function fetchProducts(): Promise<Product[]> {
-  const res = await fetch("http://localhost:3002/api/products");
-  if (!res.ok) throw new Error(`HTTP ${res.status}`);
-  return res.json();
-}
+import { useProducts } from "../hooks/useProducts";
 
 function Products() {
   const navigate = useNavigate();
-  const { data, isLoading, error } = useQuery({
-    queryKey: ["products"],
-    queryFn: fetchProducts,
-  });
+  const { data, isLoading, error } = useProducts();
   const products = data?.slice(0, 10) ?? [];
 
   return (

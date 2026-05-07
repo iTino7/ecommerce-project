@@ -6,6 +6,9 @@ import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter }
 import { Input } from "@/components/ui/input";
 import PasswordInput from "@/components/PasswordInput";
 import { Button } from "@/components/ui/button";
+import { useLogin, useRegister } from "@/hooks/useAuth";
+import { ApiError } from "@/api/auth";
+import { toast } from "sonner";
 
 const registerSchema = z.object({
   name: z.string().min(1, "Nome obbligatorio"),
@@ -37,9 +40,15 @@ function AuthPage() {
   const [form, setForm] = useState({ name: "", email: "", password: "", confirmPassword: "" });
   const [errors, setErrors] = useState<FormErrors>({});
 
+  const loginMut = useLogin();
+  const registerMut = useRegister();
+  const activeMut = isLogin ? loginMut : registerMut;
+
   useEffect(() => {
     setForm({ name: "", email: "", password: "", confirmPassword: "" });
     setErrors({});
+    loginMut.reset();
+    registerMut.reset();
   }, [location.pathname]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -51,10 +60,11 @@ function AuthPage() {
       ? loginSchema
       : registerSchema;
 
-    const result = schema.safeParse(isLogin
+    const payload = isLogin
       ? { email: form.email, password: form.password }
-      : form
-    );
+      : form;
+
+    const result = schema.safeParse(payload);
 
     if (!result.success) {
       const fieldErrors: FormErrors = {};
@@ -63,8 +73,31 @@ function AuthPage() {
         if (!fieldErrors[field]) fieldErrors[field] = err.message;
       });
       setErrors(fieldErrors);
+      return;
+    }
+
+    setErrors({});
+
+    if (isLogin) {
+      loginMut.mutate(result.data as { email: string; password: string }, {
+        onSuccess: data => console.log("login OK:", data),
+      });
     } else {
-      setErrors({});
+      registerMut.mutate(result.data as typeof form, {
+        onSuccess: () => {
+          toast.success("Registrazione completata!");
+          navigate("/");
+        },
+        onError: err => {
+          const isConflict = err instanceof ApiError && err.status === 409;
+          const looksLikeEmailDup = /email/i.test(err.message) && /(exist|gi[aà]|registr|use)/i.test(err.message);
+          if (isConflict || looksLikeEmailDup) {
+            toast.error("Email già registrata");
+          } else {
+            toast.error(err.message);
+          }
+        },
+      });
     }
   };
 
@@ -108,9 +141,16 @@ function AuthPage() {
                 <ErrorMsg field="confirmPassword" />
               </div>
             )}
-            <Button className="w-full mt-2" onClick={handleSubmit}>
-              {isLogin ? "Accedi" : "Registrati"}
+            <Button className="w-full mt-2" onClick={handleSubmit} disabled={activeMut.isPending}>
+              {activeMut.isPending
+                ? (isLogin ? "Accesso..." : "Registrazione...")
+                : (isLogin ? "Accedi" : "Registrati")}
             </Button>
+            {activeMut.error && (
+              <p style={{ color: "red", fontSize: "0.8rem", textAlign: "center", margin: 0 }}>
+                {activeMut.error.message}
+              </p>
+            )}
           </CardContent>
           <CardFooter className="justify-center text-sm">
             {isLogin ? "Non hai un account?" : "Hai già un account?"}

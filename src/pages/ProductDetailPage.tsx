@@ -1,25 +1,14 @@
 import { useParams, useNavigate } from "react-router-dom";
-import { useQuery } from "@tanstack/react-query";
 import { ArrowLeft, ShoppingCart } from "lucide-react";
-import type { Product } from "../types/product";
 import { useCart } from "../context/CartContext";
+import { useProduct } from "../hooks/useProducts";
 import Navbar from "../components/Navbar";
-
-async function fetchProduct(id: string): Promise<Product | null> {
-  const res = await fetch(`http://localhost:3002/api/products/${id}`);
-  if (!res.ok) return null;
-  return res.json();
-}
 
 function ProductDetailPage() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const { addItem, openCart } = useCart();
-  const { data: product, isLoading } = useQuery({
-    queryKey: ["product", id],
-    queryFn: () => fetchProduct(id!),
-    enabled: !!id,
-  });
+  const { addItem, openCart, items } = useCart();
+  const { data: product, isLoading } = useProduct(id);
 
   if (isLoading) {
     return (
@@ -100,25 +89,38 @@ function ProductDetailPage() {
               {product.description}
             </p>
 
-            <button
-              onClick={() => { addItem(product); openCart(); }}
-              style={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                gap: "0.5rem",
-                padding: "0.85rem 1.5rem",
-                borderRadius: "12px",
-                border: "none",
-                backgroundColor: "#646cff",
-                color: "#fff",
-                fontSize: "0.95rem",
-                fontWeight: 600,
-                cursor: "pointer",
-              }}
-            >
-              <ShoppingCart size={18} /> Aggiungi al carrello
-            </button>
+            {(() => {
+              const cartQty = items.find(i => i.id === product.id)?.quantity ?? 0;
+              const reachedMax = cartQty >= product.stock;
+              return (
+                <button
+                  onClick={() => { addItem(product); openCart(); }}
+                  disabled={reachedMax}
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    gap: "0.5rem",
+                    padding: "0.85rem 1.5rem",
+                    borderRadius: "12px",
+                    border: "none",
+                    backgroundColor: "#646cff",
+                    color: "#fff",
+                    fontSize: "0.95rem",
+                    fontWeight: 600,
+                    cursor: reachedMax ? "not-allowed" : "pointer",
+                    opacity: reachedMax ? 0.5 : 1,
+                  }}
+                >
+                  <ShoppingCart size={18} />
+                  {product.stock < 1
+                    ? "Esaurito"
+                    : reachedMax
+                      ? "Quantità massima nel carrello"
+                      : "Aggiungi al carrello"}
+                </button>
+              );
+            })()}
           </div>
         </div>
       </div>

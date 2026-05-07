@@ -10,6 +10,8 @@ import {
 } from "@/components/ui/drawer";
 import { useCart } from "../context/CartContext";
 import type { CartItem } from "../context/CartContext";
+import QuantityControls from "./QuantityControls";
+import ClearCartButton from "./ClearCartButton";
 
 function CartSidebar() {
   const { items, removeItem, total, isOpen, closeCart } = useCart();
@@ -45,7 +47,9 @@ function CartSidebar() {
                     />
                     <div className="flex-1 min-w-0">
                       <p className="font-medium text-sm m-0 truncate">{item.name}</p>
-                      <p className="text-xs opacity-50 m-0">Qtà: {item.quantity}</p>
+                      <div className="mt-1">
+                        <QuantityControls item={item} size="sm" />
+                      </div>
                     </div>
                     <span className="font-semibold text-sm">€ {(item.price * item.quantity).toFixed(2)}</span>
                     <button
@@ -86,7 +90,10 @@ function CartSidebar() {
         {items.length > 0 && (
           <DrawerFooter className="border-t border-border/40">
             <div className="flex justify-between items-center mb-2">
-              <span className="font-medium">Totale</span>
+              <div className="flex items-center gap-3">
+                <span className="font-medium">Totale</span>
+                <ClearCartButton />
+              </div>
               <span className="font-bold text-lg">€ {total.toFixed(2)}</span>
             </div>
             <button className="w-full py-3 rounded-xl bg-[#646cff] text-white font-semibold text-sm hover:opacity-85 transition-opacity cursor-pointer border-none">

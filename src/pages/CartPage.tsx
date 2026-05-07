@@ -1,5 +1,7 @@
 import { Trash2 } from "lucide-react";
 import { useCart } from "../context/CartContext";
+import QuantityControls from "../components/QuantityControls";
+import ClearCartButton from "../components/ClearCartButton";
 
 function CartPage() {
   const { items, removeItem, total } = useCart();
@@ -49,8 +51,8 @@ function CartPage() {
               }}
             />
             <div style={{ flex: 1 }}>
-              <div style={{ fontWeight: 500 }}>{item.name}</div>
-              <div style={{ fontSize: "0.85rem", opacity: 0.5 }}>Quantità: {item.quantity}</div>
+              <div style={{ fontWeight: 500, marginBottom: "0.4rem" }}>{item.name}</div>
+              <QuantityControls item={item} />
             </div>
             <div style={{ fontWeight: 600 }}>€ {(item.price * item.quantity).toFixed(2)}</div>
             <button
@@ -72,7 +74,10 @@ function CartPage() {
         justifyContent: "space-between",
         alignItems: "center",
       }}>
-        <span style={{ fontSize: "1rem", fontWeight: 500 }}>Totale</span>
+        <div style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
+          <span style={{ fontSize: "1rem", fontWeight: 500 }}>Totale</span>
+          <ClearCartButton />
+        </div>
         <span style={{ fontSize: "1.3rem", fontWeight: 700 }}>€ {total.toFixed(2)}</span>
       </div>
     </div>

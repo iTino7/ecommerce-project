@@ -7,6 +7,7 @@ import AuthPage from "./pages/AuthPage";
 import ProductDetailPage from "./pages/ProductDetailPage";
 import CartSidebar from "./components/CartSidebar";
 import { CartProvider } from "./context/CartContext";
+import { Toaster } from "@/components/ui/sonner";
 
 function Home() {
   const [heroGone, setHeroGone] = useState(() => sessionStorage.getItem("heroSeen") === "true");
@@ -40,6 +41,7 @@ function App() {
   return (
     <CartProvider>
       <BrowserRouter>
+        <Toaster position="bottom-right" richColors />
         <CartSidebar />
         <Routes>
           <Route path="/" element={<Home />} />
