@@ -3,6 +3,7 @@ import { ArrowLeft, ShoppingCart } from "lucide-react";
 import { useCart } from "../context/CartContext";
 import { useProduct } from "../hooks/useProducts";
 import Navbar from "../components/Navbar";
+import RelatedProducts from "../components/RelatedProducts";
 
 function ProductDetailPage() {
   const { id } = useParams();
@@ -50,16 +51,17 @@ function ProductDetailPage() {
   return (
     <>
       <Navbar />
-      <div style={{ maxWidth: "900px", margin: "0 auto", padding: "7rem 2rem 4rem" }}>
-        <button
-          className="search-btn"
-          style={{ fontSize: "0.9rem", display: "flex", alignItems: "center", gap: "0.4rem", marginBottom: "2rem" }}
-          onClick={() => navigate(-1)}
-        >
-          <ArrowLeft size={16} /> Torna indietro
-        </button>
+      <div style={{ paddingTop: "7rem" }}>
+        <div style={{ maxWidth: "900px", margin: "0 auto", padding: "0 2rem" }}>
+          <button
+            className="search-btn"
+            style={{ fontSize: "0.9rem", display: "flex", alignItems: "center", gap: "0.4rem", marginBottom: "2rem" }}
+            onClick={() => navigate(-1)}
+          >
+            <ArrowLeft size={16} /> Torna indietro
+          </button>
 
-        <div style={{ display: "flex", gap: "3rem", flexWrap: "wrap" }}>
+          <div style={{ display: "flex", gap: "3rem", flexWrap: "wrap" }}>
           <img
             src={product.imageUrl}
             alt={product.name}
@@ -122,6 +124,11 @@ function ProductDetailPage() {
               );
             })()}
           </div>
+          </div>
+        </div>
+
+        <div style={{ padding: "4rem 2rem" }}>
+          <RelatedProducts currentProduct={product} />
         </div>
       </div>
     </>

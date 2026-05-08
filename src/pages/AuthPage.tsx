@@ -6,9 +6,7 @@ import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter }
 import { Input } from "@/components/ui/input";
 import PasswordInput from "@/components/PasswordInput";
 import { Button } from "@/components/ui/button";
-import { useLogin, useRegister } from "@/hooks/useAuth";
-import { ApiError } from "@/api/auth";
-import { toast } from "sonner";
+import { useAuthFlow } from "@/hooks/useAuthFlow";
 
 const registerSchema = z.object({
   name: z.string().min(1, "Nome obbligatorio"),
@@ -40,15 +38,12 @@ function AuthPage() {
   const [form, setForm] = useState({ name: "", email: "", password: "", confirmPassword: "" });
   const [errors, setErrors] = useState<FormErrors>({});
 
-  const loginMut = useLogin();
-  const registerMut = useRegister();
-  const activeMut = isLogin ? loginMut : registerMut;
+  const auth = useAuthFlow(isLogin);
 
   useEffect(() => {
     setForm({ name: "", email: "", password: "", confirmPassword: "" });
     setErrors({});
-    loginMut.reset();
-    registerMut.reset();
+    auth.reset();
   }, [location.pathname]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -77,28 +72,7 @@ function AuthPage() {
     }
 
     setErrors({});
-
-    if (isLogin) {
-      loginMut.mutate(result.data as { email: string; password: string }, {
-        onSuccess: data => console.log("login OK:", data),
-      });
-    } else {
-      registerMut.mutate(result.data as typeof form, {
-        onSuccess: () => {
-          toast.success("Registrazione completata!");
-          navigate("/");
-        },
-        onError: err => {
-          const isConflict = err instanceof ApiError && err.status === 409;
-          const looksLikeEmailDup = /email/i.test(err.message) && /(exist|gi[aà]|registr|use)/i.test(err.message);
-          if (isConflict || looksLikeEmailDup) {
-            toast.error("Email già registrata");
-          } else {
-            toast.error(err.message);
-          }
-        },
-      });
-    }
+    auth.submit(result.data);
   };
 
   const ErrorMsg = ({ field }: { field: keyof FormErrors }) =>
@@ -141,14 +115,14 @@ function AuthPage() {
                 <ErrorMsg field="confirmPassword" />
               </div>
             )}
-            <Button className="w-full mt-2" onClick={handleSubmit} disabled={activeMut.isPending}>
-              {activeMut.isPending
+            <Button className="w-full mt-2" onClick={handleSubmit} disabled={auth.isPending}>
+              {auth.isPending
                 ? (isLogin ? "Accesso..." : "Registrazione...")
                 : (isLogin ? "Accedi" : "Registrati")}
             </Button>
-            {activeMut.error && (
+            {auth.error && (
               <p style={{ color: "red", fontSize: "0.8rem", textAlign: "center", margin: 0 }}>
-                {activeMut.error.message}
+                {auth.error.message}
               </p>
             )}
           </CardContent>
