@@ -27,7 +27,12 @@ function Navbar() {
       }}>
         {/* Logo + search desktop */}
         <div style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
-          <h2 style={{ margin: 0, fontSize: "2rem", fontFamily: "'Playwrite NZ Guides', cursive" }}>SkyCart</h2>
+          <h2
+            onClick={() => navigate("/")}
+            style={{ margin: 0, fontSize: "2rem", fontFamily: "'Playwrite NZ Guides', cursive", cursor: "pointer" }}
+          >
+            SkyCart
+          </h2>
 
           <div className="navbar-desktop search-group" style={{ display: "flex", alignItems: "center", gap: "0.2rem" }}>
             <div className="search-divider" style={{ width: "1px", height: "1.2rem", backgroundColor: "currentColor", opacity: 0.2 }} />

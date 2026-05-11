@@ -46,6 +46,8 @@ function RelatedProducts({ currentProduct }: Props) {
   const arrowStyle = (enabled: boolean): React.CSSProperties => ({
     width: "40px",
     height: "40px",
+    padding: 0,
+    boxSizing: "border-box",
     borderRadius: "9999px",
     border: "1px solid rgba(128,128,128,0.4)",
     background: "rgba(128,128,128,0.1)",
@@ -55,6 +57,7 @@ function RelatedProducts({ currentProduct }: Props) {
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
+    flexShrink: 0,
   });
 
   return (
@@ -90,7 +93,7 @@ function RelatedProducts({ currentProduct }: Props) {
       <Carousel opts={{ align: "start" }} setApi={setApi} className="w-full">
         <CarouselContent className="-ml-2">
           {related.map(p => (
-            <CarouselItem key={p.id} className="pl-2 basis-1/2 sm:basis-1/3 md:basis-1/4 lg:basis-1/5 xl:basis-1/6">
+            <CarouselItem key={p.id} className="pl-2 basis-1/2 sm:basis-1/3 md:basis-1/4 lg:basis-1/5 xl:basis-1/6 flex justify-center">
               <div
                 className="product-card"
                 style={{
@@ -101,6 +104,7 @@ function RelatedProducts({ currentProduct }: Props) {
                   flexDirection: "column",
                   cursor: "pointer",
                   height: "100%",
+                  width: "100%",
                 }}
                 onClick={() => navigate(`/products/${p.id}`)}
               >

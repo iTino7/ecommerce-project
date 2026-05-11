@@ -194,10 +194,6 @@ h1 {
 }
 
 @media (max-width: 640px) {
-  .product-card { flex: 1 1 calc(50% - 1.5rem); max-width: calc(50% - 1.5rem); }
-}
-
-@media (max-width: 400px) {
   .product-card { flex: 1 1 100%; max-width: 100%; }
 }
 
