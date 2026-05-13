@@ -1,10 +1,23 @@
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useProducts } from "../hooks/useProducts";
+import ProductsPagination from "./ProductsPagination";
+
+const PAGE_SIZE = 30;
 
 function Products() {
   const navigate = useNavigate();
   const { data, isLoading, error } = useProducts();
-  const products = data?.slice(0, 10) ?? [];
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const totalPages = Math.ceil((data?.length ?? 0) / PAGE_SIZE);
+  const start = (currentPage - 1) * PAGE_SIZE;
+  const products = data?.slice(start, start + PAGE_SIZE) ?? [];
+
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
 
   return (
     <section style={{ padding: "4rem 2rem", minHeight: "100vh" }}>
@@ -44,6 +57,11 @@ function Products() {
           </div>
         ))}
       </div>
+      <ProductsPagination
+        currentPage={currentPage}
+        totalPages={totalPages}
+        onPageChange={handlePageChange}
+      />
     </section>
   );
 }
