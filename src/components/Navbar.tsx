@@ -127,7 +127,6 @@ function Navbar() {
 
         {/* Desktop right actions */}
         <div className="navbar-desktop" style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
-          <span style={{ cursor: "pointer", fontSize: "0.95rem" }}>Catalogo</span>
           <button className="search-btn cart-btn" onClick={() => openCart()}>
             <ShoppingCart size={18} />
             {cartCount > 0 && <span className="cart-badge">{cartCount}</span>}
@@ -192,9 +191,6 @@ function Navbar() {
           </button>
           <button className="search-btn mobile-menu-btn" onClick={() => { navigate("/login"); setIsMobileMenuOpen(false); }}>
             <User size={18} /> <span>Account</span>
-          </button>
-          <button className="search-btn mobile-menu-btn">
-            <span>Catalogo</span>
           </button>
         </div>
       </div>
